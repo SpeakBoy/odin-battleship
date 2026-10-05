@@ -6,18 +6,32 @@ class Gameboard {
     #grid = Array.from({length: this.#rows}, () => new Array(this.#columns).fill(null));
 
     placeShip(x, y, length) {
-        if (x + length >= this.#columns || x < 0) {
+        if (x + (length - 1) >= this.#columns || x < 0) {
             throw new RangeError("x coordinate out of bounds!");
         }
         if (y >= this.#rows || y < 0) {
             throw new RangeError("y coordinate out of bounds!");
         }
-        
+
         const shipToPlace = new Ship(length);
         let i = 0;
         while (i < length) {
             this.#grid[x + i][y] = shipToPlace;
             i++;
+        }
+    }
+
+    receiveAttack(x, y) {
+        if (x >= this.#columns || x < 0) {
+            throw new RangeError("x coordinate out of bounds!");
+        }
+        if (y >= this.#rows || y < 0) {
+            throw new RangeError("y coordinate out of bounds!");
+        }
+        if (this.#grid[x][y] && this.#grid[x][y] !== "missed") {
+            this.#grid[x][y].hit();
+        } else {
+            this.#grid[x][y] = "missed";
         }
     }
 }
