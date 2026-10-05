@@ -1,4 +1,4 @@
-import Gameboard from "./gameboard";
+import Gameboard from "./gameboard.js";
 
 test("gameboard exists", () => {
     expect(new Gameboard()).toBeInstanceOf(Gameboard);

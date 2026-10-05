@@ -1,6 +1,6 @@
-import Ship from "./ship";
-import Gameboard from "./gameboard";
-import Player from "./player";
+import Ship from "./ship.js";
+import Gameboard from "./gameboard.js";
+import Player from "./player.js";
 
 class GameController {
     playerOne = new Player();
