@@ -5,6 +5,10 @@ class Ship {
     constructor(length) {
         this.#length = length;
     }
+
+    hit() {
+        this.#hits++;
+    }
 }
 
 export default Ship;
