@@ -34,6 +34,17 @@ class Gameboard {
             this.#grid[x][y] = "missed";
         }
     }
+
+    allShipsSunk() {
+        for (const row of this.#grid) {
+            for (const square of row) {
+                if (square && square !== "missed" && !square.isSunk()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }
 
 export default Gameboard;
