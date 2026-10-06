@@ -1,15 +1,13 @@
 import Ship from "./ship.js";
 
 class Gameboard {
-    #rows = 10;
-    #columns = 10;
-    #grid = Array.from({length: this.#rows}, () => new Array(this.#columns).fill(null));
+    #grid = Array.from({length: Gameboard.rows}, () => new Array(Gameboard.columns).fill(null));
 
     placeShip(x, y, length) {
-        if (x + (length - 1) >= this.#columns || x < 0) {
+        if (x + (length - 1) >= Gameboard.columns || x < 0) {
             throw new RangeError("x coordinate out of bounds!");
         }
-        if (y >= this.#rows || y < 0) {
+        if (y >= Gameboard.rows || y < 0) {
             throw new RangeError("y coordinate out of bounds!");
         }
 
@@ -22,10 +20,10 @@ class Gameboard {
     }
 
     receiveAttack(x, y) {
-        if (x >= this.#columns || x < 0) {
+        if (x >= Gameboard.columns || x < 0) {
             throw new RangeError("x coordinate out of bounds!");
         }
-        if (y >= this.#rows || y < 0) {
+        if (y >= Gameboard.rows || y < 0) {
             throw new RangeError("y coordinate out of bounds!");
         }
         if (this.#grid[x][y] && this.#grid[x][y] !== "missed") {
@@ -44,6 +42,14 @@ class Gameboard {
             }
         }
         return true;
+    }
+
+    static get rows() {
+        return 10;
+    }
+
+    static get columns() {
+        return 10;
     }
 }
 
