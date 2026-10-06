@@ -26,8 +26,8 @@ h1 {
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);
     border: 10px outset burlywood;
-    width: 400px;
-    height: 400px;
+    min-width: 400px;
+    min-height: 400px;
     place-content: stretch;
     gap: 2px;
     background-color: gray;
@@ -35,4 +35,15 @@ h1 {
 
 .tile {
     background-color: aqua;
+    text-align: center;
+}
+
+.hit {
+    color: red;
+}
+
+.hit,
+.missed {
+    font-size: xx-large;
+    font-weight: bold;
 }

@@ -4,10 +4,10 @@ class Gameboard {
     #grid = Array.from({length: Gameboard.rows}, () => new Array(Gameboard.columns).fill(null));
 
     placeShip(x, y, length) {
-        if (x + (length - 1) >= Gameboard.columns || x < 0) {
+        if (x + (length - 1) >= Gameboard.rows || x < 0) {
             throw new RangeError("x coordinate out of bounds!");
         }
-        if (y >= Gameboard.rows || y < 0) {
+        if (y >= Gameboard.columns || y < 0) {
             throw new RangeError("y coordinate out of bounds!");
         }
 
@@ -20,16 +20,18 @@ class Gameboard {
     }
 
     receiveAttack(x, y) {
-        if (x >= Gameboard.columns || x < 0) {
+        if (x >= Gameboard.rows || x < 0) {
             throw new RangeError("x coordinate out of bounds!");
         }
-        if (y >= Gameboard.rows || y < 0) {
+        if (y >= Gameboard.columns || y < 0) {
             throw new RangeError("y coordinate out of bounds!");
         }
         if (this.#grid[x][y] && this.#grid[x][y] !== "missed") {
             this.#grid[x][y].hit();
+            return "hit";
         } else {
             this.#grid[x][y] = "missed";
+            return "missed";
         }
     }
 

@@ -9,19 +9,18 @@ class GameController {
     playerTwo = new Player("computer");
 
     init() {
-        DisplayController.createGrids();
+        DisplayController.createGrids(this.playerOne.gameboard, this.playerTwo.gameboard);
     }
 
     populateGameBoards() {
         this.playerOne.gameboard.placeShip(0, 0, 3);
-        this.playerOne.gameboard.placeShip(2, 2, 3);
         this.playerOne.gameboard.placeShip(5, 5, 4);
         
-        this.playerTwo.gameboard.placeShip(0, 0, 3);
         this.playerTwo.gameboard.placeShip(2, 2, 3);
-        this.playerTwo.gameboard.placeShip(5, 5, 4);
+        this.playerTwo.gameboard.placeShip(6, 4, 2);
     }
 }
 
 const game = new GameController();
 game.init();
+game.populateGameBoards();
