@@ -1,10 +1,16 @@
 import Ship from "./ship.js";
 import Gameboard from "./gameboard.js";
 import Player from "./player.js";
+import DisplayController from "./display.js";
+import "./styles.css";
 
 class GameController {
     playerOne = new Player();
     playerTwo = new Player("computer");
+
+    init() {
+        DisplayController.createGrids();
+    }
 
     populateGameBoards() {
         this.playerOne.gameboard.placeShip(0, 0, 3);
@@ -18,4 +24,4 @@ class GameController {
 }
 
 const game = new GameController();
-game.populateGameBoards();
+game.init();

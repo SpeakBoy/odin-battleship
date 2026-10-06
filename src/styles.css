@@ -1,0 +1,38 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    place-items: center;
+}
+
+h1 {
+    margin-top: 1%;
+}
+
+#boards-container {
+    display: flex;
+    gap: 20px;
+}
+
+#boards-container > .playerOne,
+#boards-container > .playerTwo {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    grid-template-rows: repeat(10, 1fr);
+    border: 10px outset burlywood;
+    width: 400px;
+    height: 400px;
+    place-content: stretch;
+    gap: 2px;
+    background-color: gray;
+}
+
+.tile {
+    background-color: aqua;
+}
