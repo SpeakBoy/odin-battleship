@@ -1,5 +1,7 @@
 import Gameboard from "./gameboard.js";
 
+const winnerTextP = document.querySelector("#winner-text");
+
 class DisplayController {
     static createBoards(playerOneBoard, playerTwoBoard) {
         createBoard(playerOneBoard);
@@ -32,6 +34,10 @@ class DisplayController {
 
     static enableBoard(board) {
         board.classList.remove("disabled");
+    }
+
+    static displayWinner(winner) {
+        winnerTextP.textContent = `${winner} has won! Congratulations!`;
     }
 }
 

@@ -14,12 +14,13 @@ class GameController {
 
     init() {
         DisplayController.createBoards(playerOneBoard, playerTwoBoard);
+        this.#populateGameBoards();
         this.#addHitEventListeners(playerOneBoard, this.#playerOne.gameboard);
         this.#addHitEventListeners(playerTwoBoard, this.#playerTwo.gameboard);
-        this.switchCurrentTurn();
+        this.#switchCurrentTurn();
     }
     
-    switchCurrentTurn() {
+    #switchCurrentTurn() {
         if (this.#currentTurn === "p1") {
             this.#currentTurn = "p2";
             DisplayController.disableBoard(playerTwoBoard);
@@ -31,7 +32,7 @@ class GameController {
         }
     }
 
-    populateGameBoards() {
+    #populateGameBoards() {
         this.#playerOne.gameboard.placeShip(0, 0, 3);
         this.#playerOne.gameboard.placeShip(5, 5, 4);
         
@@ -50,13 +51,22 @@ class GameController {
                     } else if (attackResult === "missed") {
                         DisplayController.updateMissedTile(tile);
                     }
-                    this.switchCurrentTurn();
+                    if (gameboard.allShipsSunk()) {
+                        this.#endGame();
+                        return;
+                    }
+                    this.#switchCurrentTurn();
                 });
             }
         }
+    }
+
+    #endGame() {
+        DisplayController.disableBoard(playerOneBoard);
+        DisplayController.disableBoard(playerTwoBoard);
+        DisplayController.displayWinner(this.#currentTurn);
     }
 }
 
 const game = new GameController();
 game.init();
-game.populateGameBoards();
