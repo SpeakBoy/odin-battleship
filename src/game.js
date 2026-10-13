@@ -1,27 +1,27 @@
-import Ship from "./ship.js";
 import Gameboard from "./gameboard.js";
 import Player from "./player.js";
 import DisplayController from "./display.js";
 import "./styles.css";
 
-const playerOneBoard = document.querySelector("#boards-container > .playerOne");
-const playerTwoBoard = document.querySelector("#boards-container > .playerTwo");
+const p1Board = document.querySelector("#player-one > .board");
+const p2Board = document.querySelector("#player-two > .board");
 
 class GameController {
-    #playerOne = new Player();
-    #playerTwo = new Player("computer");
+    #p1 = new Player();
+    #p2 = new Player("computer");
     #currentTurn = null;
 
     init() {
-        DisplayController.createBoards(playerOneBoard, playerTwoBoard);
+        DisplayController.createBoards(p1Board, p2Board);
+        DisplayController.displayBoardHeaders();
         this.#populateGameBoards();
         // Event listeners are only necessary for a board if the opposing player is not a computer, 
         // otherwise attacks are done programatically.
-        if (this.#playerTwo.type !== "computer") {
-            this.#addHitEventListeners(playerOneBoard, this.#playerOne.gameboard);
+        if (this.#p2.type !== "computer") {
+            this.#addHitEventListeners(p1Board, this.#p1.gameboard);
         }
-        if (this.#playerOne.type !== "computer") {
-            this.#addHitEventListeners(playerTwoBoard, this.#playerTwo.gameboard);
+        if (this.#p1.type !== "computer") {
+            this.#addHitEventListeners(p2Board, this.#p2.gameboard);
         }
         this.#switchCurrentTurn();
     }
@@ -29,29 +29,30 @@ class GameController {
     #switchCurrentTurn() {
         if (this.#currentTurn === "p1") {
             this.#currentTurn = "p2";
-            DisplayController.disableBoard(playerTwoBoard);
-            if (this.#playerTwo.type === "computer") {
-                this.#playComputerTurn(playerOneBoard, this.#playerOne.gameboard);
+            DisplayController.disableBoard(p2Board);
+            if (this.#p2.type === "computer") {
+                this.#playComputerTurn(p1Board, this.#p1.gameboard);
                 return;
             }
-            DisplayController.enableBoard(playerOneBoard);
+            DisplayController.enableBoard(p1Board);
         } else {
             this.#currentTurn = "p1";
-            DisplayController.disableBoard(playerOneBoard);
-            if (this.#playerOne.type === "computer") {
-                this.#playComputerTurn(playerTwoBoard, this.#playerTwo.gameboard);
+            DisplayController.disableBoard(p1Board);
+            if (this.#p1.type === "computer") {
+                this.#playComputerTurn(p2Board, this.#p2.gameboard);
                 return;
             }
-            DisplayController.enableBoard(playerTwoBoard);
+            DisplayController.enableBoard(p2Board);
         }
+        DisplayController.displayCurrentTurn(this.#currentTurn);
     }
 
     #populateGameBoards() {
-        this.#playerOne.gameboard.placeShip(0, 0, 3);
-        this.#playerOne.gameboard.placeShip(5, 5, 4);
+        this.#p1.gameboard.placeShip(0, 0, 3);
+        this.#p1.gameboard.placeShip(5, 5, 4);
         
-        this.#playerTwo.gameboard.placeShip(2, 2, 3);
-        this.#playerTwo.gameboard.placeShip(6, 4, 2);
+        this.#p2.gameboard.placeShip(2, 2, 3);
+        this.#p2.gameboard.placeShip(6, 4, 2);
     }
 
     #addHitEventListeners(board, gameboard) {
@@ -106,8 +107,8 @@ class GameController {
     }
 
     #endGame() {
-        DisplayController.disableBoard(playerOneBoard);
-        DisplayController.disableBoard(playerTwoBoard);
+        DisplayController.disableBoard(p1Board);
+        DisplayController.disableBoard(p2Board);
         DisplayController.displayWinner(this.#currentTurn);
     }
 }

@@ -20,8 +20,16 @@ h1 {
     gap: 20px;
 }
 
-#boards-container > .playerOne,
-#boards-container > .playerTwo {
+#player-one,
+#player-two {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    place-items: center;
+}
+
+#player-one > .board,
+#player-two > .board {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     grid-template-rows: repeat(10, 1fr);

@@ -1,11 +1,13 @@
 import Gameboard from "./gameboard.js";
 
-const winnerTextP = document.querySelector("#winner-text");
+const statusText = document.querySelector("#status-text");
+const p1Header = document.querySelector("#player-one > .header");
+const p2Header = document.querySelector("#player-two > .header");
 
 class DisplayController {
-    static createBoards(playerOneBoard, playerTwoBoard) {
-        createBoard(playerOneBoard);
-        createBoard(playerTwoBoard);
+    static createBoards(p1Board, p2Board) {
+        createBoard(p1Board);
+        createBoard(p2Board);
 
         function createBoard(container) {
             for (let x = 0; x < Gameboard.rows; x++) {
@@ -38,8 +40,17 @@ class DisplayController {
         board.classList.remove("disabled");
     }
 
+    static displayBoardHeaders() {
+        p1Header.textContent = "p1's Board";
+        p2Header.textContent = "p2's Board";
+    }
+
+    static displayCurrentTurn(currentTurn) {
+        statusText.textContent = `It is currently ${currentTurn}'s turn to attack their opponent's board!`;
+    }
+
     static displayWinner(winner) {
-        winnerTextP.textContent = `${winner} has won! Congratulations!`;
+        statusText.textContent = `${winner} has won! Congratulations!`;
     }
 }
 
