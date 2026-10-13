@@ -20,7 +20,13 @@ class GameController {
         if (this.#p1.type !== "computer") {
             this.#placePlayerShips(this.#p1, p1Board, p1PlaceShipsContainer);
         } else {
-
+            this.#placeComputerShips(this.#p1);
+            if (this.#p2.type !== "computer") {
+                this.#placePlayerShips(this.#p2, p2Board, p2PlaceShipsContainer)
+            } else {
+                this.#placeComputerShips(this.#p2);
+                this.#initPlay();
+            }
         }
     }
 
@@ -66,7 +72,8 @@ class GameController {
                         if (this.#p2.type !== "computer") {
                             return this.#placePlayerShips(this.#p2, p2Board, p2PlaceShipsContainer);
                         } else {
-                            return;
+                            this.#placeComputerShips(this.#p2);
+                            return this.#initPlay();
                         }
                     } else {
                         return this.#initPlay();
@@ -79,6 +86,22 @@ class GameController {
                 errorMessage.textContent = error.message;
             }
         });
+    }
+
+    #placeComputerShips(player) {
+        const shipLengthsToPlace = [2, 3, 3, 4, 5];
+        while (player.gameboard.numShips < 5) {
+            let currentLength = null;
+            try {
+                currentLength = shipLengthsToPlace.pop();
+                const randomX = Math.floor(Math.random() * Gameboard.rows);
+                const randomY = Math.floor(Math.random() * Gameboard.columns);
+                player.gameboard.placeShip(randomX, randomY, currentLength);
+            }
+            catch {
+                shipLengthsToPlace.push(currentLength);
+            }
+        }
     }
     
     #switchCurrentTurn() {
@@ -131,7 +154,7 @@ class GameController {
         this.#switchCurrentTurn();
     }
 
-    #playComputerTurn(board, gameboard) {
+    async #playComputerTurn(board, gameboard) {
         let randomX = null;
         let randomY = null;
         let attackResult = null;
@@ -150,7 +173,12 @@ class GameController {
             this.#endGame();
             return;
         }
+        await this.#sleep(50);
         this.#switchCurrentTurn();
+    }
+
+    #sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     #endGame() {
