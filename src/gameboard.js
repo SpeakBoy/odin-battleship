@@ -3,6 +3,7 @@ import Ship from "./ship.js";
 class Gameboard {
     #board = Array.from({length: Gameboard.rows}, () => new Array(Gameboard.columns).fill(null));
     #attacked = Array.from({length: Gameboard.rows}, () => new Array(Gameboard.columns).fill(false));
+    #ships = [];
 
     placeShip(x, y, length) {
         if (x + (length - 1) >= Gameboard.rows || x < 0) {
@@ -11,13 +12,24 @@ class Gameboard {
         if (y >= Gameboard.columns || y < 0) {
             throw new RangeError("y coordinate out of bounds!");
         }
-
-        const shipToPlace = new Ship(length);
+        
+        // Check if ship exists in placement tiles.
         let i = 0;
         while (i < length) {
-            this.#board[x + i][y] = shipToPlace;
+            if (this.#board[x + i][y]) {
+                throw new Error(`ship already exists at (${x + i}, ${y})!`);
+            }
             i++;
         }
+        // Place ship.
+        const shipToPlace = new Ship(length);
+        this.#ships.push(shipToPlace);
+        let j = 0;
+        while (j < length) {
+            this.#board[x + j][y] = shipToPlace;
+            j++;
+        }
+        return 0;
     }
 
     receiveAttack(x, y) {
@@ -41,14 +53,16 @@ class Gameboard {
     }
 
     allShipsSunk() {
-        for (const row of this.#board) {
-            for (const square of row) {
-                if (square && square !== "missed" && !square.isSunk()) {
-                    return false;
-                }
+        for (const ship of this.#ships) {
+            if (!ship.isSunk()) {
+                return false;
             }
         }
         return true;
+    }
+
+    get numShips() {
+        return this.#ships.length;
     }
 
     static get rows() {

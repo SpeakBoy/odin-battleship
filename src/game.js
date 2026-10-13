@@ -5,25 +5,80 @@ import "./styles.css";
 
 const p1Board = document.querySelector("#player-one > .board");
 const p2Board = document.querySelector("#player-two > .board");
+const p1PlaceShipsContainer = document.querySelector("#player-one > .place-ships");
+const p2PlaceShipsContainer = document.querySelector("#player-two > .place-ships");
 
 class GameController {
     #p1 = new Player();
-    #p2 = new Player("computer");
+    #p2 = new Player();
     #currentTurn = null;
 
     init() {
         DisplayController.createBoards(p1Board, p2Board);
         DisplayController.displayBoardHeaders();
-        this.#populateGameBoards();
+
+        if (this.#p1.type !== "computer") {
+            this.#placePlayerShips(this.#p1, p1Board, p1PlaceShipsContainer);
+        } else {
+
+        }
+    }
+
+    #initPlay() {
         // Event listeners are only necessary for a board if the opposing player is not a computer, 
         // otherwise attacks are done programatically.
-        if (this.#p2.type !== "computer") {
-            this.#addHitEventListeners(p1Board, this.#p1.gameboard);
-        }
         if (this.#p1.type !== "computer") {
             this.#addHitEventListeners(p2Board, this.#p2.gameboard);
         }
+        if (this.#p2.type !== "computer") {
+            this.#addHitEventListeners(p1Board, this.#p1.gameboard);
+        }
+
         this.#switchCurrentTurn();
+    }
+
+    #placePlayerShips(player, board, formContainer) {
+        const shipLengthsToPlace = [2, 3, 3, 4, 5];
+        const form = DisplayController.createPlaceShipForm(formContainer);
+        const lengthInput = document.querySelector("#length");
+        lengthInput.value = shipLengthsToPlace.pop(); 
+        form.addEventListener("submit", (event) => {
+            event.preventDefault();
+
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const x = +document.querySelector("#x").value;
+            const y = +document.querySelector("#y").value;
+            const errorMessage = document.querySelector("#error");
+
+            try {
+                player.gameboard.placeShip(x, y, lengthInput.value);
+                DisplayController.displayPlacedShip(board, x, y, lengthInput.value);
+                form.reset();
+                errorMessage.textContent = "";
+                if (player.gameboard.numShips === 5) {
+                    DisplayController.removePlaceShipForm(formContainer);
+                    DisplayController.removePlacedShipDisplay(board);
+                    if (player === this.#p1) {
+                        if (this.#p2.type !== "computer") {
+                            return this.#placePlayerShips(this.#p2, p2Board, p2PlaceShipsContainer);
+                        } else {
+                            return;
+                        }
+                    } else {
+                        return this.#initPlay();
+                    }
+
+                }
+                lengthInput.value = shipLengthsToPlace.pop();
+            }
+            catch (error) {
+                errorMessage.textContent = error.message;
+            }
+        });
     }
     
     #switchCurrentTurn() {
@@ -45,14 +100,6 @@ class GameController {
             DisplayController.enableBoard(p2Board);
         }
         DisplayController.displayCurrentTurn(this.#currentTurn);
-    }
-
-    #populateGameBoards() {
-        this.#p1.gameboard.placeShip(0, 0, 3);
-        this.#p1.gameboard.placeShip(5, 5, 4);
-        
-        this.#p2.gameboard.placeShip(2, 2, 3);
-        this.#p2.gameboard.placeShip(6, 4, 2);
     }
 
     #addHitEventListeners(board, gameboard) {

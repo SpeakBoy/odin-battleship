@@ -59,3 +59,7 @@ h1 {
 .disabled {
     pointer-events: none;
 }
+
+.placed {
+    background-color: darkblue;
+}
