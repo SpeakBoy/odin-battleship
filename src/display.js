@@ -21,11 +21,13 @@ class DisplayController {
     static updateHitTile(tile) {
         tile.textContent = "X";
         tile.classList.add("hit");
+        tile.classList.add("disabled");
     }
 
     static updateMissedTile(tile) {
         tile.textContent = "•";
         tile.classList.add("missed");
+        tile.classList.add("disabled");
     }
 
     static disableBoard(board) {

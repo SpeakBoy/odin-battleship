@@ -46,7 +46,6 @@ h1 {
 .missed {
     font-size: xx-large;
     font-weight: bold;
-    pointer-events: none;
 }
 
 .disabled {
