@@ -45,20 +45,24 @@ class GameController {
             for (let y = 0; y < Gameboard.columns; y++) {
                 const tile = grid.children[x * Gameboard.rows + y];
                 tile.addEventListener("mousedown", () => {
-                    const attackResult = gameboard.receiveAttack(x, y);
-                    if (attackResult === "hit") {
-                        DisplayController.updateHitTile(tile);
-                    } else if (attackResult === "missed") {
-                        DisplayController.updateMissedTile(tile);
-                    }
-                    if (gameboard.allShipsSunk()) {
-                        this.#endGame();
-                        return;
-                    }
-                    this.#switchCurrentTurn();
+                    this.#playHumanTurn(tile, gameboard, x, y);
                 });
             }
         }
+    }
+
+    #playHumanTurn(tile, gameboard, x, y) {
+        const attackResult = gameboard.receiveAttack(x, y);
+        if (attackResult === "hit") {
+            DisplayController.updateHitTile(tile);
+        } else if (attackResult === "missed") {
+            DisplayController.updateMissedTile(tile);
+        }
+        if (gameboard.allShipsSunk()) {
+            this.#endGame();
+            return;
+        }
+        this.#switchCurrentTurn();
     }
 
     #endGame() {
